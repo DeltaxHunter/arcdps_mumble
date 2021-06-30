@@ -117,6 +117,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 	{
 		char buffer[4096];
 		char* p = &buffer[0];
+		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %p\n\n", "ptr", p_Mumble);
 
 		p += _snprintf_s(p, 400, _TRUNCATE, "== INTERFACE ==\n");
 		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "version", p_Mumble->ui_version);
