@@ -93,7 +93,7 @@ arcdps_exports* mod_init()
 	arc_exports.imguivers = IMGUI_VERSION_NUM;
 	arc_exports.size = sizeof(arc_exports);
 	arc_exports.out_name = "Mumble";
-	arc_exports.out_build = "2021-06-26";
+	arc_exports.out_build = __DATE__ " " __TIME__;
 	arc_exports.imgui = mod_imgui;
 	//arc_exports.options_end = mod_options;
 	arc_exports.options_windows = mod_options_windows;
@@ -212,7 +212,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "pid", p_Mumble->processId);
 
 		//ImGui::ShowDemoWindow();
-		ImGui::Begin("== MUMBLE ==", 0, 99);
+		ImGui::Begin("Mumble", &show_mumble, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 		ImGui::Text(buffer);
 		ImGui::End();
 	}
