@@ -3,10 +3,9 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <Windows.h>
-#include <D3D9.h>
+#include <string>
 #include "arcdps_structs.h"
 #include "imgui\imgui.h"
-#include <string>
 #include "mumble.h"
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
@@ -117,7 +116,9 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 	{
 		char buffer[4096];
 		char* p = &buffer[0];
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %p\n\n", "ptr", p_Mumble);
+
+		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %p\n", "ptr", p_Mumble);
+		p += _snprintf_s(p, 400, _TRUNCATE, "\n");
 
 		p += _snprintf_s(p, 400, _TRUNCATE, "== INTERFACE ==\n");
 		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "version", p_Mumble->ui_version);
@@ -152,20 +153,7 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "frontz", p_Mumble->avatar_front.z);
 		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "gx", p_Mumble->playerX);
 		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "gy", p_Mumble->playerY);
-		std::string mount;
-		switch (p_Mumble->mountIndex)
-		{
-			case 0x00: mount = "Unmounted"; break;
-			case 0x01: mount = "Jackal"; break;
-			case 0x02: mount = "Griffon"; break;
-			case 0x03: mount = "Springer"; break;
-			case 0x04: mount = "Skimmer"; break;
-			case 0x05: mount = "Raptor"; break;
-			case 0x06: mount = "RollerBeetle"; break;
-			case 0x07: mount = "Warclaw"; break;
-			case 0x08: mount = "Skyscale"; break;
-		}
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %s\n", "mount", mount.c_str());
+		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %s\n", "mount", mountLookup.at(p_Mumble->mountIndex).c_str());
 		p += _snprintf_s(p, 400, _TRUNCATE, "\n");
 
 		p += _snprintf_s(p, 400, _TRUNCATE, "== CAMERA ==\n");
@@ -179,40 +167,14 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 
 		p += _snprintf_s(p, 400, _TRUNCATE, "== GAME ==\n");
 		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "mapid", p_Mumble->mapId);
-		std::string mapType;
-		switch (p_Mumble->mapType)
-		{
-			case 0x00: mapType = "AutoRedirect"; break;
-			case 0x01: mapType = "CharacterCreation"; break;
-			case 0x02: mapType = "PvP"; break;
-			case 0x03: mapType = "GvG"; break;
-			case 0x04: mapType = "Instance"; break;
-			case 0x05: mapType = "PvE"; break;
-			case 0x06: mapType = "Tournament"; break;
-			case 0x07: mapType = "Tutorial"; break;
-			case 0x08: mapType = "UserTournament"; break;
-			case 0x09: mapType = "WvW_EBG"; break;
-			case 0x0A: mapType = "WvW_BBL"; break;
-			case 0x0B: mapType = "WvW_GBL"; break;
-			case 0x0C: mapType = "WvW_RBL"; break;
-			case 0x0D: mapType = "WvW_FV"; break;
-			case 0x0E: mapType = "WvW_OS"; break;
-			case 0x0F: mapType = "WvW_EOTM"; break;
-			case 0x10: mapType = "PvE_Mini"; break;
-			case 0x11: mapType = "BIG_BATTLE"; break;
-			case 0x12: mapType = "WvW_Lounge"; break;
-			case 0x13: mapType = "WvW"; break;
-		}
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %s\n", "maptype", mapType.c_str());
+		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %s\n", "maptype", mapTypeLookup.at(p_Mumble->mapType).c_str());
 		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u.%u.%u.%u\n", "ip",
-			p_Mumble->serverAddress[4], p_Mumble->serverAddress[5],
-			p_Mumble->serverAddress[6], p_Mumble->serverAddress[7]);
+			p_Mumble->serverAddress[4], p_Mumble->serverAddress[5], p_Mumble->serverAddress[6], p_Mumble->serverAddress[7]);
 		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "shard", p_Mumble->shardId);
 		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "instance", p_Mumble->instance);
 		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "build", p_Mumble->buildId);
 		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "pid", p_Mumble->processId);
 
-		//ImGui::ShowDemoWindow();
 		ImGui::Begin("Mumble", &show_mumble, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
 		ImGui::Text(buffer);
 		ImGui::End();

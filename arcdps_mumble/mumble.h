@@ -1,42 +1,87 @@
 #pragma once
 #include <D3D9.h>
 #include <d3d9types.h>
+#include <map>
 
-enum EMapType : unsigned
-{
-	AutoRedirect = 0,
-	CharacterCreation = 1,
-	PvP = 2,
-	GvG = 3,
-	Instance = 4,
-	PvE = 5,
-	Tournament = 6,
-	Tutorial = 7,
-	UserTournament = 8,
-	WvW_EBG = 9,
-	WvW_BBL = 10,
-	WvW_GBL = 11,
-	WvW_RBL = 12,
-	WVW_REWARD = 13,            // SCRAPPED
-	WvW_ObsidianSanctum = 14,
-	WvW_EdgeOfTheMists = 15,
-	PvE_Mini = 16,
-	BIG_BATTLE = 17,            // SCRAPPED
-	WvW_Lounge = 18,
-	WvW = 19
+const std::map<int, std::string> mapTypeLookup{
+	{0, "AutoRedirect"},
+	{1, "CharacterCreation"},
+	{2, "PvP"},
+	{3, "GvG"},
+	{4, "Instance"},
+	{5, "Public"},
+	{6, "Tournament"},
+	{7, "Tutorial"},
+	{8, "UserTournament"},
+	{9, "WvW_EBG"},
+	{10, "WvW_BBL"},
+	{11, "WvW_GBL"},
+	{12, "WvW_RBL"},
+	{13, "WVW_FV"},
+	{14, "WvW_OS"},
+	{15, "WvW_EOTM"},
+	{16, "PvE_Mini"},
+	{17, "BIG_BATTLE"},
+	{18, "WvW_Lounge"},
+	{19, "WvW"}
 };
+const std::map<int, std::string> mountLookup{
+	{0, "Unmounted"},
+	{1, "Jackal"},
+	{2, "Griffon"},
+	{3, "Springer"},
+	{4, "Skimmer"},
+	{5, "Raptor"},
+	{6, "RollerBeetle"},
+	{7, "Warclaw"},
+	{8, "Skyscale"}
+};
+const std::map<int, std::string> profLookup{
+	{1, "Guardian"},
+	{2, "Warrior"},
+	{3, "Engineer"},
+	{4, "Ranger"},
+	{5, "Thief"},
+	{6, "Elementalist"},
+	{7, "Mesmer"},
+	{8, "Necromancer"},
+	{9, "Revenant"}
+};
+const std::map<int, std::string> specLookup{
+	{0, "None"},
 
-enum EMounts : unsigned char
-{
-	Unmounted = 0x00,
-	Jackal = 0x01,
-	Griffon = 0x02,
-	Springer = 0x03,
-	Skimmer = 0x04,
-	Raptor = 0x05,
-	RollerBeetle = 0x06,
-	Warclaw = 0x07,
-	Skyscale = 0x08
+	{27, "Dragonhunter"},
+	{18, "Berserker"},
+	{43, "Scrapper"},
+	{5, "Druid"},
+	{7, "Daredevil"},
+	{48, "Tempest"},
+	{40, "Chronomancer"},
+	{34, "Reaper"},
+	{52, "Herald"},
+
+	{62, "Firebrand"},
+	{61, "Spellbreaker"},
+	{57, "Holosmith"},
+	{55, "Soulbeast"},
+	{58, "Deadeye"},
+	{56, "Weaver"},
+	{59, "Mirage"},
+	{60, "Scourge"},
+	{63, "Renegade"}
+};
+const std::map<int, std::string> raceLookup{
+	{0, "Asura"},
+	{1, "Charr"},
+	{2, "Human"},
+	{3, "Norn"},
+	{4, "Sylvari"}
+};
+const std::map<int, std::string> uiszLookup{
+	{0, "Small"},
+	{1, "Normal"},
+	{2, "Large"},
+	{3, "Larger"}
 };
 
 typedef struct LinkedMem
@@ -54,21 +99,18 @@ typedef struct LinkedMem
 	unsigned context_len;
 	unsigned char serverAddress[28]; // contains sockaddr_in or sockaddr_in6
 	unsigned mapId;
-	EMapType mapType;
+	unsigned mapType;
 	unsigned shardId;
 	unsigned instance;
 	unsigned buildId;
-	byte IsMapOpen : 1;
-	byte IsCompassTopRight : 1;
-	byte IsCompassRotating : 1;
-	byte IsGameFocused : 1;
-	byte IsCompetitive : 1;
-	byte IsTextboxFocused : 1;
-	byte IsInCombat : 1;
-	byte UNUSED1 : 1;
-	byte UNUSED2;
-	byte UNUSED3;
-	byte UNUSED4;
+	unsigned IsMapOpen : 1;
+	unsigned IsCompassTopRight : 1;
+	unsigned IsCompassRotating : 1;
+	unsigned IsGameFocused : 1;
+	unsigned IsCompetitive : 1;
+	unsigned IsTextboxFocused : 1;
+	unsigned IsInCombat : 1;
+	unsigned UNUSED1 : 1;
 	unsigned short compassWidth; // pixels
 	unsigned short compassHeight; // pixels
 	float compassRotation; // radians
@@ -78,7 +120,7 @@ typedef struct LinkedMem
 	float mapCenterY; // continentCoords
 	float mapScale;
 	unsigned processId;
-	EMounts mountIndex;
+	unsigned char mountIndex;
 	wchar_t description[2048];
 } LinkedMem;
 
