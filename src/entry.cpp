@@ -114,69 +114,170 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 {
 	if (show_mumble)
 	{
-		char buffer[4096];
-		char* p = &buffer[0];
-
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %p\n", "ptr", p_Mumble);
-		p += _snprintf_s(p, 400, _TRUNCATE, "\n");
-
-		p += _snprintf_s(p, 400, _TRUNCATE, "== INTERFACE ==\n");
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "version", p_Mumble->ui_version);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "tick", p_Mumble->ui_tick);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %s\n", "mapopen", p_Mumble->IsMapOpen ? "true" : "false");
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %s\n", "focus", p_Mumble->IsGameFocused ? "true" : "false");
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %s\n", "pvp", p_Mumble->IsCompetitive ? "true" : "false");
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %s\n", "txtfocus", p_Mumble->IsTextboxFocused ? "true" : "false");
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %s\n", "combat", p_Mumble->IsInCombat ? "true" : "false");
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %s\n", "cmploc", p_Mumble->IsCompassTopRight ? "top" : "bottom");
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "cmpwidth", p_Mumble->compassWidth);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "cmpheight", p_Mumble->compassHeight);
-		if (p_Mumble->IsCompassRotating)
-		{
-			p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %09.4f\n", "cmprot", p_Mumble->compassRotation);
-		}
-		else
-		{
-			p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %s\n", "cmprot", "disabled");
-		}
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %09.4f\n", "mapx", p_Mumble->mapCenterX);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %09.4f\n", "mapy", p_Mumble->mapCenterY);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %09.4f\n", "mapscale", p_Mumble->mapScale);
-		p += _snprintf_s(p, 400, _TRUNCATE, "\n");
-
-		p += _snprintf_s(p, 400, _TRUNCATE, "== PLAYER ==\n");
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "posx", p_Mumble->avatar_pos.x);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "posy", p_Mumble->avatar_pos.y);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "posz", p_Mumble->avatar_pos.z);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "frontx", p_Mumble->avatar_front.x);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "fronty", p_Mumble->avatar_front.y);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "frontz", p_Mumble->avatar_front.z);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "gx", p_Mumble->playerX);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "gy", p_Mumble->playerY);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %s\n", "mount", mountLookup.at(p_Mumble->mountIndex).c_str());
-		p += _snprintf_s(p, 400, _TRUNCATE, "\n");
-
-		p += _snprintf_s(p, 400, _TRUNCATE, "== CAMERA ==\n");
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "posx", p_Mumble->cam_pos.x);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "posy", p_Mumble->cam_pos.y);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "posz", p_Mumble->cam_pos.z);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "frontx", p_Mumble->cam_front.x);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "fronty", p_Mumble->cam_front.y);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %+09.4f\n", "frontz", p_Mumble->cam_front.z);
-		p += _snprintf_s(p, 400, _TRUNCATE, "\n");
-
-		p += _snprintf_s(p, 400, _TRUNCATE, "== GAME ==\n");
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "mapid", p_Mumble->mapId);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %s\n", "maptype", mapTypeLookup.at(p_Mumble->mapType).c_str());
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u.%u.%u.%u\n", "ip",
-			p_Mumble->serverAddress[4], p_Mumble->serverAddress[5], p_Mumble->serverAddress[6], p_Mumble->serverAddress[7]);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "shard", p_Mumble->shardId);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "instance", p_Mumble->instance);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "build", p_Mumble->buildId);
-		p += _snprintf_s(p, 400, _TRUNCATE, "%-010s %u\n", "pid", p_Mumble->processId);
-
 		ImGui::Begin("Mumble", &show_mumble, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-		ImGui::Text(buffer);
+
+		if (ImGui::BeginTable("table_ptr", 2))
+		{
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0); ImGui::Text("ptr");
+			ImGui::TableSetColumnIndex(1); ImGui::Text("%p", p_Mumble);
+
+			ImGui::EndTable();
+		}
+
+		if (ImGui::CollapsingHeader("Interface"))
+		{
+			if (ImGui::BeginTable("table_ui", 2))
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("version");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%u", p_Mumble->ui_version);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("tick");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%u", p_Mumble->ui_tick);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("mapopen");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%s", p_Mumble->IsMapOpen ? "true" : "false");
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("focus");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%s", p_Mumble->IsGameFocused ? "true" : "false");
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("pvp");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%s", p_Mumble->IsCompetitive ? "true" : "false");
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("txtfocus");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%s", p_Mumble->IsTextboxFocused ? "true" : "false");
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("combat");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%s", p_Mumble->IsInCombat ? "true" : "false");
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("cmploc");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%s", p_Mumble->IsCompassTopRight ? "top" : "bottom");
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("cmpwidth");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%u", p_Mumble->compassWidth);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("cmpheight");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%u", p_Mumble->compassHeight);
+				if (p_Mumble->IsCompassRotating)
+				{
+					ImGui::TableNextRow();
+					ImGui::TableSetColumnIndex(0); ImGui::Text("cmprot");
+					ImGui::TableSetColumnIndex(1); ImGui::Text("%09.4f", p_Mumble->compassRotation);
+				}
+				else
+				{
+					ImGui::TableNextRow();
+					ImGui::TableSetColumnIndex(0); ImGui::Text("cmprot");
+					ImGui::TableSetColumnIndex(1); ImGui::Text("%s", "disabled");
+				}
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("mapx");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%09.4f", p_Mumble->mapCenterX);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("mapy");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%09.4f", p_Mumble->mapCenterY);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("mapscale");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%09.4f", p_Mumble->mapScale);
+
+				ImGui::EndTable();
+			}
+		}
+
+		if (ImGui::CollapsingHeader("Player"))
+		{
+			if (ImGui::BeginTable("table_player", 2))
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("posx");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->avatar_pos.x);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("posy");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->avatar_pos.y);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("posz");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->avatar_pos.z);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("frontx");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->avatar_front.x);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("fronty");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->avatar_front.y);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("frontz");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->avatar_front.z);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("gx");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->playerX);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("gy");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->playerY);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("mount");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%s", mountLookup.at(p_Mumble->mountIndex).c_str());
+
+				ImGui::EndTable();
+			}
+		}
+		
+		if (ImGui::CollapsingHeader("Camera"))
+		{
+			if (ImGui::BeginTable("table_camera", 2))
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("posx");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->cam_pos.x);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("posy");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->cam_pos.y);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("posz");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->cam_pos.z);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("frontx");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->cam_front.x);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("fronty");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->cam_front.y);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("frontz");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->cam_front.z);
+
+				ImGui::EndTable();
+			}
+		}
+		
+		if (ImGui::CollapsingHeader("Game"))
+		{
+			if (ImGui::BeginTable("table_game", 2))
+			{
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("mapid");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%u", p_Mumble->mapId);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("maptype");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%s", mapTypeLookup.at(p_Mumble->mapType).c_str());
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("ip");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%u.%u.%u.%u", p_Mumble->serverAddress[4], p_Mumble->serverAddress[5], p_Mumble->serverAddress[6], p_Mumble->serverAddress[7]);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("shard");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%u", p_Mumble->shardId);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("instance");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%u", p_Mumble->instance);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("build");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%u", p_Mumble->buildId);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("pid");
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%u", p_Mumble->processId);
+
+				ImGui::EndTable();
+			}
+		}
+		
 		ImGui::End();
 	}
 

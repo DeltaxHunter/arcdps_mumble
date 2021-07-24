@@ -20,10 +20,10 @@ const std::map<int, std::string> mapTypeLookup{
 	{13, "WVW_FV"},
 	{14, "WvW_OS"},
 	{15, "WvW_EOTM"},
-	{16, "PvE_Mini"},
+	{16, "Public_Mini"},
 	{17, "BIG_BATTLE"},
 	{18, "WvW_Lounge"},
-	{19, "WvW"}
+	{19, "WvW"} // silently removed in a later patch (new wvw map?)
 };
 const std::map<int, std::string> mountLookup{
 	{0, "Unmounted"},
