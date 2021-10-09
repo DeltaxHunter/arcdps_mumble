@@ -21,7 +21,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 }
 
 /* proto */
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversion, ImGuiContext* imguictx, IDirect3DDevice9* id3dd9, HANDLE arcdll, void* mallocfn, void* freefn);
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversion, ImGuiContext* imguictx, void* id3dptr, HANDLE arcdll, void* mallocfn, void* freefn, uint32_t d3dversion);
 extern "C" __declspec(dllexport) void* get_release_addr();
 
 arcdps_exports* mod_init();
@@ -36,7 +36,6 @@ void log_arc(char* str);
 
 /* globals */
 arcdps_exports arc_exports;
-IDirect3DDevice9* d3d9device;
 void* filelog;
 void* arclog;
 
@@ -66,12 +65,11 @@ void log_arc(char* str)
 }
 
 /* export -- arcdps looks for this exported function and calls the address it returns on client load */
-extern "C" __declspec(dllexport) void* get_init_addr(char* arcversion, ImGuiContext* imguictx, IDirect3DDevice9* id3dd9, HANDLE arcdll, void* mallocfn, void* freefn)
+extern "C" __declspec(dllexport) void* get_init_addr(char* arcversion, ImGuiContext* imguictx, void* id3dptr, HANDLE arcdll, void* mallocfn, void* freefn, uint32_t d3dversion)
 {
 	ImGui::SetCurrentContext((ImGuiContext*)imguictx);
 	ImGui::SetAllocatorFunctions((void *(*)(size_t, void*))mallocfn, (void(*)(void*, void*))freefn); // on imgui 1.80+
 
-	d3d9device = id3dd9;
 	filelog = (void*)GetProcAddress((HMODULE)arcdll, "e3");
 	arclog = (void*)GetProcAddress((HMODULE)arcdll, "e8");
 
@@ -159,16 +157,14 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0); ImGui::Text("cmpheight");
 				ImGui::TableSetColumnIndex(1); ImGui::Text("%u", p_Mumble->compassHeight);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0); ImGui::Text("cmprot");
 				if (p_Mumble->IsCompassRotating)
 				{
-					ImGui::TableNextRow();
-					ImGui::TableSetColumnIndex(0); ImGui::Text("cmprot");
 					ImGui::TableSetColumnIndex(1); ImGui::Text("%09.4f", p_Mumble->compassRotation);
 				}
 				else
 				{
-					ImGui::TableNextRow();
-					ImGui::TableSetColumnIndex(0); ImGui::Text("cmprot");
 					ImGui::TableSetColumnIndex(1); ImGui::Text("%s", "disabled");
 				}
 				ImGui::TableNextRow();
@@ -209,10 +205,10 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->avatar_front.z);
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0); ImGui::Text("gx");
-				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->playerX);
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%09.4f", p_Mumble->playerX);
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0); ImGui::Text("gy");
-				ImGui::TableSetColumnIndex(1); ImGui::Text("%+09.4f", p_Mumble->playerY);
+				ImGui::TableSetColumnIndex(1); ImGui::Text("%09.4f", p_Mumble->playerY);
 				ImGui::TableNextRow();
 				ImGui::TableSetColumnIndex(0); ImGui::Text("mount");
 				ImGui::TableSetColumnIndex(1); ImGui::Text("%s", mountLookup.at(p_Mumble->mountIndex).c_str());
