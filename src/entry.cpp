@@ -150,7 +150,7 @@ uintptr_t UIInterfaceData()
 		ImGui::TableNextRow();
 		ImGui::TableSetColumnIndex(0); ImGui::Text("cmprot");
 		ImGui::TableSetColumnIndex(1);
-		p_Mumble->IsCompassRotating ? ImGui::Text("%09.4f", p_Mumble->compassRotation) : ImGui::Text("%s", "disabled");
+		p_Mumble->IsCompassRotating ? ImGui::Text("%+1.4f", p_Mumble->compassRotation) : ImGui::Text("%s", "disabled");
 		ImGui::TableNextRow();
 		ImGui::TableSetColumnIndex(0); ImGui::Text("mapx");
 		ImGui::TableSetColumnIndex(1); ImGui::Text("%09.4f", p_Mumble->mapCenterX);
@@ -159,7 +159,7 @@ uintptr_t UIInterfaceData()
 		ImGui::TableSetColumnIndex(1); ImGui::Text("%09.4f", p_Mumble->mapCenterY);
 		ImGui::TableNextRow();
 		ImGui::TableSetColumnIndex(0); ImGui::Text("mapscale");
-		ImGui::TableSetColumnIndex(1); ImGui::Text("%09.4f", p_Mumble->mapScale);
+		ImGui::TableSetColumnIndex(1); ImGui::Text("%1.4f", p_Mumble->mapScale);
 
 		ImGui::EndTable();
 	}
@@ -278,7 +278,7 @@ uintptr_t UIGameData()
 }
 uintptr_t UIIdentityData()
 {
-	ImGui::Begin("Identity", &show_game);
+	ImGui::Begin("Identity", &show_identity);
 
 	if (p_Mumble->identity[0])
 	{
