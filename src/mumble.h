@@ -2,6 +2,7 @@
 #include <D3D9.h>
 #include <d3d9types.h>
 #include <map>
+#include <string>
 
 const std::map<int, std::string> mapTypeLookup{
 	{0, "AutoRedirect"},
@@ -34,7 +35,9 @@ const std::map<int, std::string> mountLookup{
 	{5, "Raptor"},
 	{6, "RollerBeetle"},
 	{7, "Warclaw"},
-	{8, "Skyscale"}
+	{8, "Skyscale"},
+	{9, "Skiff"},
+	{10, "SiegeTurtle"}
 };
 const std::map<int, std::string> profLookup{
 	{1, "Guardian"},
@@ -68,7 +71,17 @@ const std::map<int, std::string> specLookup{
 	{56, "Weaver"},
 	{59, "Mirage"},
 	{60, "Scourge"},
-	{63, "Renegade"}
+	{63, "Renegade"},
+
+	{65, "Willbender"},
+	{68, "Bladesworn"},
+	{70, "Mechanist"},
+	{72, "Untamed"},
+	{71, "Specter"},
+	{67, "Catalyst"},
+	{66, "Virtuoso"},
+	{64, "Harbinger"},
+	{69, "Vindicator"}
 };
 const std::map<int, std::string> raceLookup{
 	{0, "Asura"},
@@ -124,5 +137,6 @@ typedef struct LinkedMem
 	wchar_t description[2048];
 } LinkedMem;
 
+std::wstring get_mumble_name();
 LinkedMem* mumble_link_create();
 void mumble_link_destroy();
