@@ -99,8 +99,8 @@ arcdps_exports* mod_init()
 	arc_exports.options_end = mod_options_end;
 
 	log((char*)"Mumble: MOD_INIT"); // if using vs2015+, project properties > c++ > conformance mode > permissive to avoid const to not const conversion error
-
-	p_Mumble = mumble_link_create();
+	
+	p_Mumble = mumble_link_create(get_mumble_name());
 
 	return &arc_exports;
 }
@@ -280,39 +280,46 @@ uintptr_t UIIdentityData()
 {
 	ImGui::Begin("Identity", &show_game);
 
-	json j = json::parse(p_Mumble->identity);
-
-	if (ImGui::BeginTable("table_identity", 2))
+	if (p_Mumble->identity[0])
 	{
-		ImGui::TableNextRow();
-		ImGui::TableSetColumnIndex(0); ImGui::Text("cmdr");
-		ImGui::TableSetColumnIndex(1); ImGui::Text("%s", j["commander"].get<bool>() ? "true" : "false");
-		ImGui::TableNextRow();
-		ImGui::TableSetColumnIndex(0); ImGui::Text("fov");
-		ImGui::TableSetColumnIndex(1); ImGui::Text("%1.4f", j["fov"].get<float>());
-		ImGui::TableNextRow();
-		ImGui::TableSetColumnIndex(0); ImGui::Text("name");
-		ImGui::TableSetColumnIndex(1); ImGui::Text(j["name"].get<std::string>().c_str());
-		ImGui::TableNextRow();
-		ImGui::TableSetColumnIndex(0); ImGui::Text("prof");
-		ImGui::TableSetColumnIndex(1); ImGui::Text("%s", profLookup.at(j["profession"].get<unsigned>()).c_str());
-		ImGui::TableNextRow();
-		ImGui::TableSetColumnIndex(0); ImGui::Text("race");
-		ImGui::TableSetColumnIndex(1); ImGui::Text("%s", raceLookup.at(j["race"].get<unsigned>()).c_str());
-		ImGui::TableNextRow();
-		ImGui::TableSetColumnIndex(0); ImGui::Text("spec");
-		ImGui::TableSetColumnIndex(1); ImGui::Text("%s", specLookup.at(j["spec"].get<unsigned>()).c_str());
-		ImGui::TableNextRow();
-		ImGui::TableSetColumnIndex(0); ImGui::Text("team");
-		ImGui::TableSetColumnIndex(1); ImGui::Text("%u", j["team_color_id"].get<unsigned>());
-		ImGui::TableNextRow();
-		ImGui::TableSetColumnIndex(0); ImGui::Text("uisz");
-		ImGui::TableSetColumnIndex(1); ImGui::Text("%s", uiszLookup.at(j["uisz"].get<unsigned>()).c_str());
-		ImGui::TableNextRow();
-		ImGui::TableSetColumnIndex(0); ImGui::Text("world");
-		ImGui::TableSetColumnIndex(1); ImGui::Text("%u", j["world_id"].get<unsigned>());
+		json j = json::parse(p_Mumble->identity);
 
-		ImGui::EndTable();
+		if (ImGui::BeginTable("table_identity", 2))
+		{
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0); ImGui::Text("cmdr");
+			ImGui::TableSetColumnIndex(1); ImGui::Text("%s", j["commander"].get<bool>() ? "true" : "false");
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0); ImGui::Text("fov");
+			ImGui::TableSetColumnIndex(1); ImGui::Text("%1.4f", j["fov"].get<float>());
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0); ImGui::Text("name");
+			ImGui::TableSetColumnIndex(1); ImGui::Text(j["name"].get<std::string>().c_str());
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0); ImGui::Text("prof");
+			ImGui::TableSetColumnIndex(1); ImGui::Text("%s", profLookup.at(j["profession"].get<unsigned>()).c_str());
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0); ImGui::Text("race");
+			ImGui::TableSetColumnIndex(1); ImGui::Text("%s", raceLookup.at(j["race"].get<unsigned>()).c_str());
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0); ImGui::Text("spec");
+			ImGui::TableSetColumnIndex(1); ImGui::Text("%s", specLookup.at(j["spec"].get<unsigned>()).c_str());
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0); ImGui::Text("team");
+			ImGui::TableSetColumnIndex(1); ImGui::Text("%u", j["team_color_id"].get<unsigned>());
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0); ImGui::Text("uisz");
+			ImGui::TableSetColumnIndex(1); ImGui::Text("%s", uiszLookup.at(j["uisz"].get<unsigned>()).c_str());
+			ImGui::TableNextRow();
+			ImGui::TableSetColumnIndex(0); ImGui::Text("world");
+			ImGui::TableSetColumnIndex(1); ImGui::Text("%u", j["world_id"].get<unsigned>());
+
+			ImGui::EndTable();
+		}
+	}
+	else
+	{
+		ImGui::Text("Identity unitialised.");
 	}
 
 	ImGui::End();
@@ -332,6 +339,8 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 }
 
 uintptr_t mod_options_end() {
+	ImGui::Text("Pointer %p", p_Mumble);
+
 	ImGui::Checkbox("Interface", &show_interface);
 	ImGui::Checkbox("Player", &show_player);
 	ImGui::Checkbox("Camera", &show_camera);

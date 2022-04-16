@@ -1,6 +1,4 @@
-# arcdps_mumble
+# Mumble Inspector
 A simple arcdps module that dumps the MumbleLink data into a window.
 
-![alt text](https://i.imgur.com/2IVRqwX.png)
-
-![alt text](https://i.imgur.com/mWoQLg2.png)
+![alt text](https://imgur.com/a/gneWJmq)

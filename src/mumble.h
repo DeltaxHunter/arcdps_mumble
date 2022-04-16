@@ -138,5 +138,5 @@ typedef struct LinkedMem
 } LinkedMem;
 
 std::wstring get_mumble_name();
-LinkedMem* mumble_link_create();
+LinkedMem* mumble_link_create(std::wstring);
 void mumble_link_destroy();

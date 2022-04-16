@@ -26,10 +26,8 @@ std::wstring get_mumble_name()
 	return L"MumbleLink";
 }
 
-LinkedMem* mumble_link_create()
+LinkedMem* mumble_link_create(std::wstring mumble_name)
 {
-	std::wstring mumble_name = get_mumble_name();
-
 	hMumble = OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, mumble_name.c_str());
 	if (hMumble == 0)
 	{
