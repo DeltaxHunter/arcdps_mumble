@@ -43,6 +43,7 @@ void* filelog;
 void* arclog;
 
 LinkedMem* p_Mumble = nullptr;
+std::string mumble_name;
 bool show_interface = false;
 bool show_player = false;
 bool show_camera = false;
@@ -100,7 +101,10 @@ arcdps_exports* mod_init()
 
 	log((char*)"Mumble: MOD_INIT"); // if using vs2015+, project properties > c++ > conformance mode > permissive to avoid const to not const conversion error
 	
-	p_Mumble = mumble_link_create(get_mumble_name());
+	std::wstring wMumble = get_mumble_name();
+	mumble_name = std::string(wMumble.begin(), wMumble.end());
+
+	p_Mumble = mumble_link_create(wMumble);
 
 	return &arc_exports;
 }
@@ -339,7 +343,8 @@ uintptr_t mod_imgui(uint32_t not_charsel_or_loading)
 }
 
 uintptr_t mod_options_end() {
-	ImGui::Text("Pointer %p", p_Mumble);
+	ImGui::Text("Mumble Name: %s", mumble_name.c_str());
+	ImGui::Text("Pointer: %p", p_Mumble);
 
 	ImGui::Checkbox("Interface", &show_interface);
 	ImGui::Checkbox("Player", &show_player);
